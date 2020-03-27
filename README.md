@@ -9,7 +9,7 @@
 - [ ] Save the result
 
 ## Dependencies
-####I do recommend to use a virtualenv
+#### I do recommend to use a virtualenv
 Python version 3.6.8
 
 - Open CV:
