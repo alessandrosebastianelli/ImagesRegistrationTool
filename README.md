@@ -1,4 +1,4 @@
-# Images registation tool for Earth Observation application
+# Images registation tool for Earth Observation applications
 ###### Author: Alessandro Sebastianelli, alessandro.sebastianelli1995@gmail.com
 
 ## Status
