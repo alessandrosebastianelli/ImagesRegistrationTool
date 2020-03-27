@@ -2,7 +2,7 @@
 ###### Author: Alessandro Sebastianelli, alessandro.sebastianelli1995@gmail.com
 
 ## Status
-- [X] GUI
+- [X] GUI
 - [X] Load Images
 - [X] Registration
 - [X] Extra features (grid, grayscale)
