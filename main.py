@@ -88,7 +88,7 @@ def saveResult():
   save_image(output_image, format_type.get())
 
 root = tk.Tk()
-root.title("Images Registration")
+root.title("Images Registration Tool")
 root.geometry("930x430")
 root.resizable(False, False)
 helv36 = TkFont.Font(root, family="Helvetica",size=20)#,weight="bold")
