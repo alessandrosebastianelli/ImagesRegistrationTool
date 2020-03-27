@@ -6,7 +6,7 @@
 - [X] Load Images
 - [X] Registration
 - [X] Extra features (grid, grayscale)
-- [ ] Save the result
+- [X] Save the result
 
 ## Dependencies
 #### I do recommend to use a virtualenv

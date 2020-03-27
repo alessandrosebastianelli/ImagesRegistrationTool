@@ -7,7 +7,7 @@ from matplotlib.backends.backend_tkagg import (
 from matplotlib.backend_bases import key_press_handler
 from matplotlib.figure import Figure
 import numpy as np
-from imageLoader import load_image
+from imageManager import load_image, save_image
 from registration import register, rgb2gray
 
 figsize = (3,3)
@@ -65,7 +65,7 @@ def registerImage():
   ax.get_yaxis().set_visible(False)
   
   global output_image 
-  output_image = register(master_image, slave_image, registration_type = warp_type)
+  output_image = register(master_image, slave_image, registration_type = warp_type.get())
 
   t = np.arange(0, 3, .01)
 
@@ -84,6 +84,9 @@ def registerImage():
   out_canvas.draw()
 
 
+def saveResult():
+  save_image(output_image, format_type.get())
+
 root = tk.Tk()
 root.title("Images Registration")
 root.geometry("930x430")
@@ -96,7 +99,6 @@ setting_frame = tk.Frame(root)
 setting_frame.pack(side=tk.TOP)
 
 warp_type = tk.StringVar()
-warp_type = 'warp_affine'
 warp_affine = tk.Radiobutton(setting_frame, text="Warp affine", variable=warp_type, value='warp_affine', font=helv36)
 warp_affine.grid(row=1, column=1, sticky=tk.W)
 warp_perspective = tk.Radiobutton(setting_frame, text="Warp perspective", variable=warp_type, value='warp_perspective', font=helv36)
@@ -111,7 +113,6 @@ gray_scale = tk.Checkbutton(setting_frame, text="Gray Scale", variable=gray_scal
 gray_scale.grid(row=2, column=2, sticky=tk.W)
 
 format_type = tk.StringVar()
-format_type = 'tif'
 format_png = tk.Radiobutton(setting_frame, text="PNG", variable=format_type, value='png', font=helv36)
 format_png.grid(row=1, column=3, sticky=tk.W)
 format_tif = tk.Radiobutton(setting_frame, text="TIF", variable=format_type, value='tif', font=helv36)
@@ -167,7 +168,7 @@ register_btn.grid(row=3, column=3, sticky=tk.W, padx=30)
 save_frame = tk.Frame(root)
 save_frame.pack(side=tk.TOP)
 
-save = tk.Button(save_frame, text='SAVE', height=1, width=20, font=helv36)
+save = tk.Button(save_frame, text='SAVE', height=1, width=20, font=helv36, command = saveResult)
 save.grid(row=1, column=1, sticky=tk.W)
 
 

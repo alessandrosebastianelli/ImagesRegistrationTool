@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import rasterio
+from PIL import Image
 
 def load_image(path, normalization='minmax'):
     
@@ -28,3 +29,15 @@ def load_image(path, normalization='minmax'):
     image = np.clip(image, 0.0, 1.0)
       
   return image 
+
+def save_image(image, t):
+
+  if 'tif' in t:
+    dataset = rasterio.open("registered_slave.tif",'w',driver='GTiff',height=image.shape[0],width=image.shape[1],count=image.shape[2],dtype=image.dtype)
+    for i in range(image.shape[2]):
+      dataset.write(image[...,i], i+1)
+    
+    dataset.close()
+  else:
+    im = Image.fromarray((image * 255).astype(np.uint8))
+    im.save("registered_slave.png")
