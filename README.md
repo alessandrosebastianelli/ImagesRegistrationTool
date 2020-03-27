@@ -23,14 +23,14 @@ Python version 3.6.8
 
 ## Tutorial
 
-The tool has been developped to be very easy to use.
+The tool has been developed to be very easy to use.
 
 ![](preview.png)
 
 - First row
 	- Warp affine or warp perspective: are two registration method (select your favorite)
 	- Grid: activate a grid when an image is loaded, it can be used to verify the registration
-	- Gray scale: turns the plot into a gray scale version when an image is loaded
+	- Grayscale: turns the plot into a grayscale version when an image is loaded
 	- PNG and TIF: choose the save format
 
 - Second row: preview of images

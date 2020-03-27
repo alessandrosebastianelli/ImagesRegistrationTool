@@ -109,7 +109,7 @@ grid_plot = tk.Checkbutton(setting_frame, text="Grid", variable=grid_val, font=h
 grid_plot.grid(row=1, column=2, sticky=tk.W)
 
 gray_scale_val = tk.BooleanVar()
-gray_scale = tk.Checkbutton(setting_frame, text="Gray Scale", variable=gray_scale_val, font=helv36)
+gray_scale = tk.Checkbutton(setting_frame, text="Grayscale", variable=gray_scale_val, font=helv36)
 gray_scale.grid(row=2, column=2, sticky=tk.W)
 
 format_type = tk.StringVar()
