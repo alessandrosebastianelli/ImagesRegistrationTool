@@ -7,8 +7,10 @@ from matplotlib.backends.backend_tkagg import (
 from matplotlib.backend_bases import key_press_handler
 from matplotlib.figure import Figure
 import numpy as np
+from imageLoader import load_image
+from registration import register, rgb2gray
 
-
+figsize = (3,3)
 master_image = None
 slave_image = None
 output_image = None
@@ -16,33 +18,78 @@ output_image = None
 
 def selectMaster():
   path = filedialog.askopenfilename(initialdir = "/",title = "Select master")
+  global  master_image
+  master_image = load_image(path)
   ax = master_fig.axes[0]
   ax.get_xaxis().set_visible(False)
   ax.get_yaxis().set_visible(False)
 
-  t = np.arange(0, 3, .01)
-  ax.plot(t, 2 * np.sin(2 * np.pi * t))
-  master_canvas.draw()
+  if gray_scale_val.get():
+    ax.imshow(rgb2gray(master_image), cmap = 'gray')
+  else:
+    ax.imshow(master_image)
   
-  print(path)
+  if grid_val.get():
+    ax.get_xaxis().set_visible(True)
+    ax.get_yaxis().set_visible(True)
+    ax.grid(color='r', linewidth=2)
+
+  master_canvas.draw()
+
+  return master_image
 
 def selectSlave():
   path = filedialog.askopenfilename(initialdir = "/",title = "Select master")
+  global slave_image 
+  slave_image = load_image(path)
   ax = slave_fig.axes[0]
   ax.get_xaxis().set_visible(False)
   ax.get_yaxis().set_visible(False)
 
-  t = np.arange(0, 3, .01)
-  ax.plot(t, 2 * np.sin(2 * np.pi * t))
+  if gray_scale_val.get():
+    ax.imshow(rgb2gray(slave_image), cmap = 'gray')
+  else:
+    ax.imshow(slave_image)
+
+  if grid_val.get():
+    ax.get_xaxis().set_visible(True)
+    ax.get_yaxis().set_visible(True)
+    ax.grid(color='r', linewidth=2)
+
   slave_canvas.draw()
+
+
+def registerImage():
+  ax = out_fig.axes[0]
+  ax.get_xaxis().set_visible(False)
+  ax.get_yaxis().set_visible(False)
   
-  print(path)
+  global output_image 
+  output_image = register(master_image, slave_image, registration_type = warp_type)
+
+  t = np.arange(0, 3, .01)
+
+  if gray_scale_val.get():
+    ax.imshow(rgb2gray(output_image), cmap = 'gray')
+    output_image = rgb2gray(output_image)
+  else:
+    ax.imshow(output_image)
+
+  if grid_val.get():
+    ax.get_xaxis().set_visible(True)
+    ax.get_yaxis().set_visible(True)
+    ax.grid(color='r', linewidth=2)
+  
+
+  out_canvas.draw()
 
 
 root = tk.Tk()
-root.geometry("900x600")
+root.title("Images Registration")
+root.geometry("930x430")
 root.resizable(False, False)
 helv36 = TkFont.Font(root, family="Helvetica",size=20)#,weight="bold")
+
 
 
 setting_frame = tk.Frame(root)
@@ -77,32 +124,45 @@ images_frame.pack(side=tk.TOP)
 #-------------------------------- MASTER IMAGE --------------------------------
 master_frame = tk.Frame(images_frame)
 master_frame.grid(row=1, column=1, sticky=tk.W)
-master_fig = Figure(figsize=(3, 3), dpi=100)
+master_fig = Figure(figsize=figsize, dpi=100)
 master_fig.add_subplot(111)
+master_fig.subplots_adjust(left=0.03, bottom=0.07, right=0.98, top=0.97, wspace=0, hspace=0)
+ax = master_fig.axes[0]
+ax.get_xaxis().set_visible(False)
+ax.get_yaxis().set_visible(False)
 master_canvas = FigureCanvasTkAgg(master_fig, master=master_frame)  # A tk.DrawingArea.
-master_canvas.get_tk_widget().grid(row=2, column=1)
+master_canvas.get_tk_widget().grid(row=2, column=1, sticky=tk.W)
 select_master = tk.Button(master_frame, text='SELECT MASTER', height=1, width=20, font=helv36, command = selectMaster)
 select_master.grid(row=3, column=1)
 
 #--------------------------------- SLAVE IMAGE --------------------------------
 slave_frame = tk.Frame(images_frame)
 slave_frame.grid(row=1, column=2, sticky=tk.W)
-slave_fig = Figure(figsize=(3, 3), dpi=100)
+slave_fig = Figure(figsize=figsize, dpi=100)
 slave_fig.add_subplot(111)
+slave_fig.subplots_adjust(left=0.03, bottom=0.07, right=0.98, top=0.97, wspace=0, hspace=0)
+ax = slave_fig.axes[0]
+ax.get_xaxis().set_visible(False)
+ax.get_yaxis().set_visible(False)
 slave_canvas = FigureCanvasTkAgg(slave_fig, master=slave_frame)  # A tk.DrawingArea.
-slave_canvas.get_tk_widget().grid(row=2, column=2)
+slave_canvas.get_tk_widget().grid(row=2, column=2, sticky=tk.W)
 select_slave = tk.Button(slave_frame, text='SELECT SLAVE', height=1, width=20, font=helv36, command = selectSlave)
-select_slave.grid(row=3, column=2, sticky=tk.W)
+select_slave.grid(row=3, column=2, sticky=tk.W, padx=30)
+
 
 #---------------------------------- OUT IMAGE ----------------------------------
 out_frame = tk.Frame(images_frame)
 out_frame.grid(row=1, column=3, sticky=tk.W)
-out_fig = Figure(figsize=(3, 3), dpi=100)
+out_fig = Figure(figsize=figsize, dpi=100)
 out_fig.add_subplot(111)
+out_fig.subplots_adjust(left=0.03, bottom=0.07, right=0.98, top=0.97, wspace=0, hspace=0)
+ax = out_fig.axes[0]
+ax.get_xaxis().set_visible(False)
+ax.get_yaxis().set_visible(False)
 out_canvas = FigureCanvasTkAgg(out_fig, master=out_frame)  # A tk.DrawingArea.
-out_canvas.get_tk_widget().grid(row=2, column=3)
-register = tk.Button(out_frame, text='REGISTER', height=1, width=20, font=helv36)
-register.grid(row=3, column=3, sticky=tk.W)
+out_canvas.get_tk_widget().grid(row=2, column=3, sticky=tk.W)
+register_btn = tk.Button(out_frame, text='REGISTER', height=1, width=20, font=helv36, command = registerImage)
+register_btn.grid(row=3, column=3, sticky=tk.W, padx=30)
 
 save_frame = tk.Frame(root)
 save_frame.pack(side=tk.TOP)
