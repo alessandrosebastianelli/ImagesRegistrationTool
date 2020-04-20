@@ -21,6 +21,8 @@ Python version 3.6.8
 - Rasterio
 - Pillow
 
+pip install -r requirements.txt
+
 ## Tutorial
 
 The tool has been developed to be very easy to use.
