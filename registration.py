@@ -6,12 +6,13 @@ from affine_ransac import Ransac
 from affine_transform import Affine
 
 def rgb2gray(image):
-  
   # OpenCv requires images with range between 0 and 255 and with uint8 type
   rescaled = (255.0/image.max()*(image - image.min())).astype(np.uint8)
-  gray = cv2.cvtColor(rescaled, cv2.COLOR_RGB2GRAY)
+
+  if image.ndim >= 3:
+    rescaled = cv2.cvtColor(rescaled, cv2.COLOR_RGB2GRAY)
   
-  return gray
+  return rescaled
   
 def affine_matrix(kp_master, kp_slave, fit_pos):
   # Extract corresponding points from all key points
@@ -32,6 +33,7 @@ def affine_matrix(kp_master, kp_slave, fit_pos):
   return M
 
 def register(master, slave, registration_type = 'warp_affine'):
+ 
   master = rgb2gray(master)
   original_slave = slave
   slave = rgb2gray(slave)

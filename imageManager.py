@@ -9,6 +9,7 @@ def load_image(path, normalization='minmax'):
       
     dataset = rasterio.open(path)
     img = dataset.read()
+
     image = np.zeros(tuple(reversed(img.shape)))
     
     for i in range(image.shape[len(image.shape)-1]):
@@ -28,7 +29,10 @@ def load_image(path, normalization='minmax'):
     image = (image - image.mean())/(image.std())
     image = np.clip(image, 0.0, 1.0)
       
-  return image 
+  if img.shape[0] == 1:
+    return image[...,0]
+  else:
+    return image
 
 def save_image(image, t):
 
